@@ -5,7 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Divider, Grid, ListItem } from "@mui/material";
+import { Container, Divider, Grid, ListItem } from "@mui/material";
 import { Stack } from "@mui/system";
 import { NavLink } from "react-router-dom";
 import Rating from "@mui/material/Rating";
@@ -23,29 +23,33 @@ const card = (
     <CardContent>
       <Box sx={{ textAlign: "center" }}>
         <img
-          style={{ width: "300px" }}
+          style={{ width: "250px" }}
           src="https://shop.cyberlearn.vn/images/adidas-prophere.png"
           alt=""
         />
       </Box>
-      <Box>
+      <Box sx={{ textAlign: "center" }}>
         <Rating name="read-only" value={4} readOnly />
       </Box>
-      <Typography variant="h5" component="div">
-        be{bull}nev{bull}o{bull}lent
+      <Typography style={{ textAlign: "center" }} variant="h5" component="div">
+        Name
       </Typography>
-      <Typography sx={{ mb: 1.5 }} color="text.secondary">
-        adjective
-      </Typography>
-      <Typography variant="body2">
-        well meaning and kindly.
-        <br />
-        {'"a benevolent smile"'}
+
+      <Typography style={{ textAlign: "center" }} variant="body2">
+        $120.00
       </Typography>
     </CardContent>
-    <CardActions>
-      <Button style={{ backgroundColor: "black" }} size="small">
-        Learn More
+    <CardActions sx={{ justifyContent: "center" }}>
+      <Button
+        style={{
+          backgroundColor: "black",
+          padding: "10px 25px",
+          borderRadius: "12px",
+          color: "#fff",
+        }}
+        size="small"
+      >
+        Add To Cart
       </Button>
     </CardActions>
   </React.Fragment>
@@ -59,32 +63,40 @@ export default function Product() {
         <Box style={{ margin: "0 20px", display: "inline" }}>123</Box>
         <Box style={{ margin: "0 20px", display: "inline" }}>123</Box>
       </Box>
-      <Grid sx={{ paddingTop: "50px" }} container spacing={3} minHeight={160}>
-        <Grid item xs={12} md={3}>
-          <Card variant="outlined">{card}</Card>
+      <Container>
+        <Grid
+          sx={{ paddingTop: "50px" }}
+          container
+          spacing={3}
+          columns={16}
+          minHeight={160}
+        >
+          <Grid item xs={16} md={5} lg={4} sm={8}>
+            <Card>{card}</Card>
+          </Grid>
+          <Grid item xs={16} md={5} lg={4} sm={8}>
+            <Card sx={{ maxWidth: 345 }}>{card}</Card>
+          </Grid>
+          <Grid item xs={16} md={5} lg={4} sm={8}>
+            <Card>{card}</Card>
+          </Grid>
+          <Grid item xs={16} md={5} lg={4} sm={8}>
+            <Card sx={{ maxWidth: 345 }}>{card}</Card>
+          </Grid>
+          <Grid item xs={16} md={5} lg={4} sm={8}>
+            <Card>{card}</Card>
+          </Grid>
+          <Grid item xs={16} md={5} lg={4} sm={8}>
+            <Card sx={{ maxWidth: 345 }}>{card}</Card>
+          </Grid>
+          <Grid item xs={16} md={5} lg={4} sm={8}>
+            <Card>{card}</Card>
+          </Grid>
+          <Grid item xs={16} md={5} lg={4} sm={8}>
+            <Card sx={{ maxWidth: 345 }}>{card}</Card>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={3}>
-          <Card variant="outlined">{card}</Card>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Card variant="outlined">{card}</Card>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Card variant="outlined">{card}</Card>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Card variant="outlined">{card}</Card>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Card variant="outlined">{card}</Card>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Card variant="outlined">{card}</Card>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Card variant="outlined">{card}</Card>
-        </Grid>
-      </Grid>
+      </Container>
     </Box>
   );
 }

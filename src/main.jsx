@@ -24,9 +24,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="" element={<HomeTemplate />}>
             <Route index element={<Home />}></Route>
-            <Route path="detail">
+            {/* <Route path="detail">
               <Route path=":id" element={<Detail />}></Route>
-            </Route>
+            </Route> */}
+
+            <Route path="detail" element={<Detail />}></Route>
+
             <Route path="cart" element={<Cart />}></Route>
             <Route path="login" element={<Login />}></Route>
             <Route path="profile" element={<Profile />}></Route>

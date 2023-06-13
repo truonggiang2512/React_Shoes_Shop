@@ -25,7 +25,7 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
-export default function ItemReview() {
+export default function Product() {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -33,8 +33,8 @@ export default function ItemReview() {
   };
   return (
     <div>
-      <Grid container spacing={3} minHeight={160}>
-        <Grid item xs={12} md={4}>
+      <Grid container spacing={3} columns={12} minHeight={160}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ maxWidth: 345 }}>
             <CardHeader
               action={
@@ -68,7 +68,7 @@ export default function ItemReview() {
             </CardActions>
           </Card>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ maxWidth: 345 }}>
             <CardHeader
               action={
@@ -102,7 +102,7 @@ export default function ItemReview() {
             </CardActions>
           </Card>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ maxWidth: 345 }}>
             <CardHeader
               action={

@@ -218,7 +218,10 @@ export default function Header() {
       }}
     >
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+        <AppBar
+          position="static"
+          sx={{ backgroundColor: "#fff", color: "black" }}
+        >
           <Toolbar>
             {/* <MuiDrawer /> */}
             <Box>
@@ -233,6 +236,7 @@ export default function Header() {
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                 borderRadius: "20px",
+                color: "black",
               }}
             >
               <SearchIconWrapper>

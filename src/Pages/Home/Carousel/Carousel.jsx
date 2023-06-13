@@ -66,7 +66,42 @@ export default class SimpleSlider extends Component {
             </div>
 
             <Box>
-              <h3>2</h3>
+              <Grid
+                sx={{ bgcolor: grey[100] }}
+                container
+                spacing={2}
+                columns={16}
+              >
+                <Grid
+                  item
+                  xs={8}
+                  sx={{ textAlign: "center", alignItems: "center" }}
+                >
+                  <Typography
+                    sx={{ fontWeight: "500", color: "#000" }}
+                    variant="h3"
+                    gutterBottom
+                  >
+                    Buy Lofer Shoes
+                  </Typography>
+                  <Typography variant="h4">
+                    {" "}
+                    <NavLink style={{ alignItems: "center" }}>
+                      {" "}
+                      View more
+                    </NavLink>
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <ListItem>
+                    <img
+                      style={{ width: "50%" }}
+                      src="https://shop.cyberlearn.vn/images/adidas-prophere.png"
+                      alt=""
+                    />
+                  </ListItem>
+                </Grid>
+              </Grid>
             </Box>
           </Slider>
         </div>

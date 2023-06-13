@@ -11,14 +11,14 @@ const theme = extendTheme({
           default: "#fff",
         },
         primary: {
-          main: "#fff",
+          main: "#000",
         },
       },
       overrides: {
         MuiButton: {
           raisedPrimary: {
-            color: "#fff",
-            background: "#000",
+            color: "#000",
+            background: "#fff",
           },
         },
       },
