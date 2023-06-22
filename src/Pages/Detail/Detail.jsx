@@ -9,46 +9,103 @@ import {
   Typography,
 } from "@mui/material";
 import Rating from "@mui/material/Rating";
-import React from "react";
+import React, { useEffect } from "react";
 import CardActions from "@mui/material/CardActions";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductByIDApi } from "../../Redux/Reducers/ProductReducer";
+import { useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
+import axios from "axios";
+import {
+  addToCartAction,
+  changeQuantityAction,
+} from "../../Redux/Reducers/CartReducer";
 
-const card = (
-  <React.Fragment>
-    <CardContent>
-      <Box sx={{ textAlign: "center" }}>
-        <img
-          style={{ width: "250px" }}
-          src="https://shop.cyberlearn.vn/images/adidas-prophere.png"
-          alt=""
-        />
-      </Box>
-      <Box sx={{ textAlign: "center" }}>
-        <Rating name="read-only" value={4} readOnly />
-      </Box>
-      <Typography style={{ textAlign: "center" }} variant="h5" component="div">
-        Name
-      </Typography>
-
-      <Typography style={{ textAlign: "center" }} variant="body2">
-        $120.00
-      </Typography>
-    </CardContent>
-    <CardActions sx={{ justifyContent: "center" }}>
-      <Button
-        style={{
-          backgroundColor: "black",
-          padding: "10px 25px",
-          borderRadius: "12px",
-          color: "white",
-        }}
-        size="small"
-      >
-        Add To Cart
-      </Button>
-    </CardActions>
-  </React.Fragment>
-);
 export default function Detail() {
+  const [productDetail, setProductDetail] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const params = useParams();
+  const { arrProduct } = useSelector((state) => state.productReducer);
+  const dispatch = useDispatch();
+
+  const getProductDetailApi = async (id) => {
+    const result = await axios({
+      url: `https://shop.cyberlearn.vn/api/Product/getbyid?id=${id}`,
+      method: "GET",
+    });
+    //Đưa dữ liệu lấy tự api về vào state
+    setProductDetail(result.data.content);
+    console.log("id", result.data.content);
+  };
+  useEffect(() => {
+    getProductDetailApi(params.id);
+  }, [params.id]);
+  const renderRelateProduct = () => {
+    return productDetail.relatedProducts?.map((item, index) => {
+      return (
+        <Grid item xs={16} md={5} lg={4} sm={8} key={index}>
+          <Card>
+            <React.Fragment>
+              <CardContent>
+                <Box sx={{ textAlign: "center" }}>
+                  <img style={{ width: "250px" }} src={item.image} alt="" />
+                </Box>
+                <Box sx={{ textAlign: "center" }}>
+                  <Rating name="read-only" value={4} readOnly />
+                </Box>
+                <Typography
+                  style={{ textAlign: "center" }}
+                  variant="h5"
+                  component="div"
+                >
+                  {item.name}
+                </Typography>
+
+                <Typography style={{ textAlign: "center" }} variant="body2">
+                  ${item.price}
+                </Typography>
+              </CardContent>
+              <CardActions sx={{ justifyContent: "center" }}>
+                <Button
+                  style={{
+                    backgroundColor: "black",
+                    padding: "10px 25px",
+                    borderRadius: "12px",
+                    color: "white",
+                  }}
+                  onClick={() => {
+                    const action = addToCartAction(item);
+                    dispatch(action);
+                    console.log(action);
+                  }}
+                  size="small"
+                >
+                  Add To Cart
+                </Button>
+                <Box>
+                  <NavLink
+                    style={{
+                      marginLeft: "20px",
+                      backgroundColor: "black",
+                      padding: "10px 25px",
+                      borderRadius: "12px",
+                      color: "white",
+                      textDecoration: "none",
+                      fontFamily: "Arial",
+                    }}
+                    to={`/detail/${item.id}`}
+                  >
+                    View Detail
+                  </NavLink>
+                </Box>
+              </CardActions>
+            </React.Fragment>
+          </Card>
+        </Grid>
+      );
+    });
+  };
+
   return (
     <Container>
       <Box>
@@ -57,16 +114,16 @@ export default function Detail() {
             <CardMedia
               component="img"
               height="300"
-              image="https://shop.cyberlearn.vn/images/adidas-prophere.png"
+              image={productDetail.image}
               alt="Paella dish"
             />
           </Grid>
           <Grid item xs={12} sm={12} md={8} lg={6}>
             <Box>
-              <Typography variant="h2">Name</Typography>
+              <Typography variant="h2">{productDetail.name}</Typography>
             </Box>
             <Box>
-              <Typography variant="h1">Price</Typography>
+              <Typography variant="h1">${productDetail.price}</Typography>
             </Box>
             <Box>
               <li>100% Quality</li>
@@ -89,15 +146,27 @@ export default function Detail() {
                       fontSize: "25px",
                       padding: "2px 30px 2px 10px",
                     }}
+                    onClick={() => {
+                      if (quantity < 1) {
+                        alert("không thể chỉnh số lượng nhỏ hơn nữa");
+                        return;
+                      } else {
+                        setQuantity(quantity - 1);
+                      }
+                    }}
                   >
                     -
-                  </Button>{" "}
-                  1
+                  </Button>
+                  {quantity}
+
                   <Button
                     style={{
                       backgroundColor: "white",
                       fontSize: "25px",
                       padding: "2px 10px 2px 30px",
+                    }}
+                    onClick={() => {
+                      setQuantity(quantity + 1);
                     }}
                   >
                     +
@@ -110,6 +179,11 @@ export default function Detail() {
                     borderRadius: "12px",
                     color: "white",
                   }}
+                  onClick={() => {
+                    const action = addToCartAction(productDetail);
+                    dispatch(action);
+                    console.log(action);
+                  }}
                   size="small"
                 >
                   Add To Cart
@@ -119,103 +193,28 @@ export default function Detail() {
             <hr />
 
             <Grid container columns={20} minHeight={100}>
-              <Grid item xs={4} sm={2} lg={3}>
-                <Button
-                  style={{
-                    backgroundColor: "black",
-                    padding: "10px 25px",
-                    borderRadius: "12px",
-                    color: "white",
-                  }}
-                  size="small"
-                >
-                  36
-                </Button>
-              </Grid>
-              <Grid item xs={4} sm={2} lg={3}>
-                <Button
-                  style={{
-                    backgroundColor: "black",
-                    padding: "10px 25px",
-                    borderRadius: "12px",
-                    color: "white",
-                  }}
-                  size="small"
-                >
-                  37
-                </Button>
-              </Grid>
-              <Grid item xs={4} sm={2} lg={3}>
-                <Button
-                  style={{
-                    backgroundColor: "black",
-                    padding: "10px 25px",
-                    borderRadius: "12px",
-                    color: "white",
-                  }}
-                  size="small"
-                >
-                  38
-                </Button>
-              </Grid>
-              <Grid item xs={4} sm={2} lg={3}>
-                <Button
-                  style={{
-                    backgroundColor: "black",
-                    padding: "10px 25px",
-                    borderRadius: "12px",
-                    color: "white",
-                  }}
-                  size="small"
-                >
-                  39
-                </Button>
-              </Grid>
-              <Grid item xs={4} sm={2} lg={3}>
-                <Button
-                  style={{
-                    backgroundColor: "black",
-                    padding: "10px 25px",
-                    borderRadius: "12px",
-                    color: "white",
-                  }}
-                  size="small"
-                >
-                  40
-                </Button>
-              </Grid>
-              <Grid item xs={4} sm={2} lg={3}>
-                <Button
-                  style={{
-                    backgroundColor: "black",
-                    padding: "10px 25px",
-                    borderRadius: "12px",
-                    color: "white",
-                  }}
-                  size="small"
-                >
-                  41
-                </Button>
-              </Grid>
-              <Grid item xs={4} sm={2} lg={3}>
-                <Button
-                  style={{
-                    backgroundColor: "black",
-                    padding: "10px 25px",
-                    borderRadius: "12px",
-                    color: "white",
-                  }}
-                  size="small"
-                >
-                  42
-                </Button>
-              </Grid>
+              {productDetail.size?.map((item) => (
+                <Grid item xs={4} sm={2} lg={3} key={item}>
+                  <Button
+                    style={{
+                      backgroundColor: "black",
+                      padding: "10px 25px",
+                      borderRadius: "12px",
+                      color: "white",
+                    }}
+                    size="small"
+                  >
+                    {item}
+                  </Button>
+                </Grid>
+              ))}
             </Grid>
           </Grid>
         </Grid>
       </Box>
+      <hr />
       <Box>
-        <Typography>Release Product</Typography>
+        <Typography sx={{ textAlign: "center" }}>Release Product</Typography>
       </Box>
       <Grid
         sx={{ paddingTop: "50px" }}
@@ -224,15 +223,7 @@ export default function Detail() {
         columns={12}
         minHeight={160}
       >
-        <Grid item xs={16} md={5} lg={4} sm={8}>
-          <Card>{card}</Card>
-        </Grid>
-        <Grid item xs={16} md={5} lg={4} sm={8}>
-          <Card>{card}</Card>
-        </Grid>
-        <Grid item xs={16} md={5} lg={4} sm={8}>
-          <Card>{card}</Card>
-        </Grid>
+        {renderRelateProduct()}
       </Grid>
     </Container>
   );

@@ -1,45 +1,135 @@
-import { Box, Container, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Container, Stack, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/base";
-const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
-  },
-  {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeQuantityAction,
+  delProductAction,
+  postProductAction,
+  postProductApi,
+} from "../../Redux/Reducers/CartReducer";
+import { http } from "../../Utils/config";
+import axios from "axios";
+import { Navigate } from "react-router-dom";
 
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
 export default function Cart() {
-  const [arrId, setArrId] = useState([]);
+  const columns = [
+    { field: "id", headerName: "ID", width: 70 },
+    {
+      field: "image",
+      headerName: "Image",
+      width: 160,
+      renderCell: (params) => {
+        return (
+          <>
+            <img src={params.value} width={100} alt="" />
+          </>
+        );
+      },
+    },
+    { field: "name", headerName: "Name", width: 160 },
+    {
+      field: "quality",
+      headerName: "Quality",
+      width: 120,
+      sortable: false,
+      disableClickEventBubbling: true,
 
-  const handleDeleteAll = () => {
-    console.log(arrId);
+      renderCell: (params) => {
+        return (
+          <Stack direction="row" spacing={2}>
+            <Box>
+              <Button
+                variant="outlined"
+                style={{ marginRight: "10px" }}
+                onClick={() => {
+                  const action = changeQuantityAction({
+                    id: params.id,
+                    quantity: -1,
+                  });
+                  if (params.row.quantity < 1) {
+                    window.alert("Bạn có muốn xoá sản phẩm này không");
+                    const action = delProductAction(params.row.id);
+                    dispatch(action);
+                  } else {
+                    dispatch(action);
+                  }
+                }}
+              >
+                -
+              </Button>
+              {params.row.quantity}
+              <Button
+                variant="outlined"
+                style={{ marginLeft: "10px" }}
+                onClick={() => {
+                  const action = changeQuantityAction({
+                    id: params.id,
+                    quantity: 1,
+                  });
+
+                  dispatch(action);
+                }}
+              >
+                +
+              </Button>
+            </Box>
+          </Stack>
+        );
+      },
+    },
+    {
+      field: "price",
+      headerName: "Price",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      valueGetter: (params) => params.row.price * params.row.quantity,
+    },
+    {
+      field: "delete",
+      headerName: "Delete",
+      width: 120,
+      sortable: false,
+      disableClickEventBubbling: true,
+
+      renderCell: (params) => {
+        const onClick = (e) => {
+          const action = delProductAction(params.row.id);
+          dispatch(action);
+        };
+
+        return (
+          <Stack direction="row" spacing={2}>
+            <Button variant="outlined" size="small" onClick={onClick}>
+              Delete
+            </Button>
+          </Stack>
+        );
+      },
+    },
+  ];
+
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.CartReducer);
+  console.log(cart);
+  const { orderDetail } = useSelector((state) => state.CartReducer);
+  const postProductApi = async (id, quantity) => {
+    const result = await http.post("/api/Users/order", { id, quantity });
+    //Đưa dữ liệu lấy tự api về vào state
   };
+  const getProductDetailApi = async () => {
+    const result = await axios({
+      url: `https://shop.cyberlearn.vn/api/Users/order`,
+      method: "POST",
+    });
+    //Đưa dữ liệu lấy tự api về vào state
+  };
+  if (!localStorage.getItem("userLogin")) {
+    alert("Phải đăng nhập !");
+    return <Navigate to="/login" />;
+  }
   return (
     <Container>
       <Box>
@@ -47,29 +137,41 @@ export default function Cart() {
 
         <hr />
         <Box sx={{ marginTop: "40px" }}>
-          <Button
-            onClick={handleDeleteAll}
-            style={{ padding: "10px 20px 10px 20px ", background: "red" }}
-          >
-            Delete
-          </Button>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={rows}
+              rows={cart}
               columns={columns}
+              getRowId={(row) => row.id}
               initialState={{
                 pagination: {
                   paginationModel: { page: 0, pageSize: 5 },
                 },
               }}
               pageSizeOptions={[5, 10]}
-              checkboxSelection
-              onRowSelectionModelChange={(id) => {
-                setArrId(id);
-              }}
+              onRowSelectionModelChange={() => {}}
             />
           </div>
         </Box>
+        <Button
+          style={{
+            padding: "10px 20px 10px 20px ",
+            background: "green",
+            marginTop: "10px",
+            textAlign: "right",
+            fontSize: "20px",
+          }}
+          size="small"
+          onClick={() => {
+            cart?.map((item) => {
+              const action = postProductAction(item);
+
+              dispatch(action);
+              postProductApi();
+            });
+          }}
+        >
+          Submit Order
+        </Button>
       </Box>
     </Container>
   );

@@ -4,62 +4,93 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
-// Theme
-import { useColorScheme } from "@mui/material/styles";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import DarkModeOutLinedIcon from "@mui/icons-material/DarkModeOutlined";
-import useScrollTrigger from "@mui/material/useScrollTrigger";
-import InputLabel from "@mui/material/InputLabel";
+import { Navigate } from "react-router-dom";
+
 // Drawer
-import { Container, Drawer } from "@mui/material";
-import { MuiDrawer } from "./Drawer";
-import { grey } from "@mui/material/colors";
+import { Badge, Button, Container, Drawer } from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { deleteCookie, USER_LOGIN } from "../../Utils/config";
+import { loginAction } from "../../Redux/Reducers/userReducer";
 
 //theme function
+const reloadRender = () => {
+  window.location.reload();
+  localStorage.removeItem(USER_LOGIN);
+  deleteCookie(USER_LOGIN);
+  //dispatch
+  const action = loginAction({});
+  dispatch(action);
+};
+const renderLogin = () => {
+  if (localStorage.getItem("userLogin")) {
+    return (
+      <>
+        <Button onClick={reloadRender} className="nav-link">
+          Logout
+        </Button>
+      </>
+    );
+  }
 
-function ModeSelect() {
-  const { mode, setMode } = useColorScheme();
-
-  const handleChange = (event) => {
-    const selectMode = event.target.value;
-    console.log(selectMode);
-    setMode(selectMode);
-  };
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <InputLabel id="label-select-dark-light-mode">mode</InputLabel>
-      <Select
-        labelId="label-select-dark-light-mode"
-        id="select-dark-light-mode"
-        value={mode}
-        label="mode"
-        onChange={handleChange}
+    <Box>
+      <Button
+        sx={{
+          marginRight: "10px",
+          background: "#a7ffeb",
+          color: "#000",
+          "&:hover": {
+            color: "white",
+            backgroundColor: "#a7ffeb",
+          },
+        }}
+        disabled={false}
+        size="medium"
+        variant="outline"
       >
-        <MenuItem value="light">
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <LightModeIcon fontSize="small" /> Light
-          </div>
-        </MenuItem>
-        <MenuItem value="dark">
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <DarkModeOutLinedIcon fontSize="small" /> Dark
-          </div>
-        </MenuItem>
-        <MenuItem value="system">System</MenuItem>
-      </Select>
-    </FormControl>
+        <NavLink
+          to="/login"
+          style={{ textDecoration: "none", textTransform: "none" }}
+        >
+          Sign In
+        </NavLink>
+      </Button>
+      <Button
+        sx={{
+          marginRight: "10px",
+          color: "#000",
+          background: "#bdbdbd",
+          "&:hover": {
+            color: "white",
+            backgroundColor: "#bdbdbd",
+          },
+        }}
+        disabled={false}
+        size="medium"
+        variant="outline"
+      >
+        <NavLink
+          to="/register"
+          style={{
+            textDecoration: "none",
+            textTransform: "none",
+            color: "white",
+          }}
+        >
+          Sign Up
+        </NavLink>
+      </Button>
+    </Box>
   );
-}
+};
 // header function
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -102,6 +133,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+  const { cart } = useSelector((state) => state.CartReducer);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -142,7 +174,12 @@ export default function Header() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        {" "}
+        <NavLink style={{ textDecoration: "none" }} to="profile">
+          Profile
+        </NavLink>
+      </MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
@@ -164,29 +201,6 @@ export default function Header() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem> */}
-      <MenuItem>
-        <ModeSelect />
-      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -197,7 +211,13 @@ export default function Header() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <NavLink to="profile">Profile</NavLink>
+      </MenuItem>
+      <MenuItem sx={{ marginRight: "10px" }}>
+        <NavLink to="cart">
+          <AddShoppingCartIcon />
+          <p style={{ marginBottom: "20px", color: "red" }}>{cart.length}</p>
+        </NavLink>
       </MenuItem>
     </Menu>
   );
@@ -225,11 +245,13 @@ export default function Header() {
           <Toolbar>
             {/* <MuiDrawer /> */}
             <Box>
-              <img
-                alt="shoeser"
-                src="https://demos.coderplace.com/woo/WCM01/WCM01004/wp-content/uploads/2022/10/logo.svg"
-                width="130"
-              />
+              <NavLink to="home">
+                <img
+                  alt="shoeser"
+                  src="https://demos.coderplace.com/woo/WCM01/WCM01004/wp-content/uploads/2022/10/logo.svg"
+                  width="130"
+                />
+              </NavLink>
             </Box>
 
             <Search
@@ -267,7 +289,21 @@ export default function Header() {
                 <NotificationsIcon />
               </Badge>
             </IconButton> */}
+              <Box sx={{ marginTop: "10px" }}>{renderLogin()}</Box>
 
+              <NavLink to="cart">
+                <IconButton
+                  size="medium"
+                  edge="end"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                >
+                  <AddShoppingCartIcon />
+                  <p style={{ marginBottom: "20px", color: "red" }}>
+                    ({cart.length})
+                  </p>
+                </IconButton>
+              </NavLink>
               <IconButton
                 size="large"
                 edge="end"
@@ -279,7 +315,6 @@ export default function Header() {
               >
                 <AccountCircle />
               </IconButton>
-              <ModeSelect />
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton

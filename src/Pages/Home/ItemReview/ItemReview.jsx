@@ -14,7 +14,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Box, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -32,7 +32,7 @@ export default function Product() {
     setExpanded(!expanded);
   };
   return (
-    <div>
+    <Container>
       <Grid container spacing={3} columns={12} minHeight={160}>
         <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ maxWidth: 345 }}>
@@ -42,20 +42,22 @@ export default function Product() {
                   <MoreVertIcon />
                 </IconButton>
               }
-              title="Adidas Propire"
+              title="Nike React Element"
               subheader=""
             />
             <CardMedia
               component="img"
               height="194"
-              image="https://shop.cyberlearn.vn/images/adidas-prophere.png"
+              image="https://shop.cyberlearn.vn/images/nike-react-element.png"
               alt="Paella dish"
             />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
+                Nike shoe is the rare high-percentage shooter who's also a
+                coach's dream on D. Designed for his unrivaled 2-way game, the
+                PG 4 unveils a new cushioning system that's lightweight,
+                articulated and responsive, ideal for players like PG who go
+                hard every play.
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
@@ -76,20 +78,22 @@ export default function Product() {
                   <MoreVertIcon />
                 </IconButton>
               }
-              title="Adidas Propire"
+              title="Nike Shox TL"
               subheader=""
             />
             <CardMedia
               component="img"
               height="194"
-              image="https://shop.cyberlearn.vn/images/adidas-prophere.png"
+              image="https://shop.cyberlearn.vn/images/nike-shox-tl.png"
               alt="Paella dish"
             />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
+                Nike shoe is the rare high-percentage shooter who's also a
+                coach's dream on D. Designed for his unrivaled 2-way game, the
+                PG 4 unveils a new cushioning system that's lightweight,
+                articulated and responsive, ideal for players like PG who go
+                hard every play.
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
@@ -110,20 +114,22 @@ export default function Product() {
                   <MoreVertIcon />
                 </IconButton>
               }
-              title="Adidas Propire"
+              title="Nike SP Dunk"
               subheader=""
             />
             <CardMedia
               component="img"
               height="194"
-              image="https://shop.cyberlearn.vn/images/adidas-prophere.png"
+              image="https://shop.cyberlearn.vn/images/nike-sp-dunk.png"
               alt="Paella dish"
             />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
+                Nike shoe is the rare high-percentage shooter who's also a
+                coach's dream on D. Designed for his unrivaled 2-way game, the
+                PG 4 unveils a new cushioning system that's lightweight,
+                articulated and responsive, ideal for players like PG who go
+                hard every play.
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
@@ -137,6 +143,6 @@ export default function Product() {
           </Card>
         </Grid>
       </Grid>
-    </div>
+    </Container>
   );
 }

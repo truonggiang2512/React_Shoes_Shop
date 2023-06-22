@@ -1,12 +1,71 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { DataGrid } from "@mui/x-data-grid";
 import { Stack } from "@mui/system";
 import { Button } from "@mui/base";
 import Avatar from "@mui/material/Avatar";
+import { Navigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getProfileApi,
+  updateProfile,
+  updateProfileAction,
+} from "../../Redux/Reducers/userReducer";
+import { getStoreJson, USER_LOGIN } from "../../Utils/config";
 
 export default function Profile() {
+  const { userProfile } = useSelector((state) => state.userReducer);
+  console.log(userProfile, "123");
+  getStoreJson(USER_LOGIN);
+  const [selected, setSelected] = useState(`${userProfile?.gender}`);
+
+  const handleChange = (event) => {
+    console.log(event.target.value);
+    setSelected(event.target.value);
+  };
+  const dispatch = useDispatch();
+
+  const getProfileApiFunction = async () => {
+    const actionAsync = getProfileApi();
+    dispatch(actionAsync);
+  };
+
+  useEffect(() => {
+    //vừa vào trang dispatch api getprofile
+    getProfileApiFunction();
+  }, []);
+  const email = USER_LOGIN?.email;
+  const updateFrm = useFormik({
+    initialValues: {
+      email: `${email}`,
+      password: "",
+      gender: "true",
+      name: "",
+      phone: "",
+    },
+    validationSchema: yup.object().shape({
+      password: yup
+        .string()
+        .required("password cannot be blank!")
+        .min(6, "6 - 32 characters")
+        .max(32, "6 - 32 characters"),
+      name: yup.string().required("name cannot be blank"),
+      phone: yup
+        .string()
+        .required("phone cannot be blank")
+        .matches(/\d$/, "phone is numbers"),
+    }),
+    onSubmit: async (values) => {
+      console.log(values);
+
+      const actionAsync = updateProfile(values);
+      dispatch(actionAsync);
+    },
+  });
+
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     {
@@ -14,7 +73,6 @@ export default function Profile() {
       headerName: "Image",
       width: 160,
       renderCell: (params) => {
-        console.log(params);
         return (
           <>
             <img src={params.value} width={100} alt="" />
@@ -44,21 +102,11 @@ export default function Profile() {
 
         return (
           <Stack direction="row" spacing={2}>
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={onClickGiam}
-            >
+            <Button variant="outlined" size="small" onClick={onClickGiam}>
               -
             </Button>
             <h4>{value}</h4>
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={onClickTang}
-            >
+            <Button variant="outlined" size="small" onClick={onClickTang}>
               +
             </Button>
           </Stack>
@@ -72,60 +120,6 @@ export default function Profile() {
       sortable: false,
       width: 160,
       valueGetter: (params) => params.row.price * value,
-    },
-    {
-      field: "delete",
-      headerName: "Delete",
-      width: 120,
-      sortable: false,
-      disableClickEventBubbling: true,
-
-      renderCell: (params) => {
-        const onClick = (e) => {
-          const currentRow = params.row;
-          return alert(JSON.stringify(currentRow, null, 4));
-        };
-
-        return (
-          <Stack direction="row" spacing={2}>
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={onClick}
-            >
-              Delete
-            </Button>
-          </Stack>
-        );
-      },
-    },
-    {
-      field: "edit",
-      headerName: "Edit",
-      width: 120,
-      sortable: false,
-      disableClickEventBubbling: true,
-
-      renderCell: (params) => {
-        const onClick = (e) => {
-          const currentRow = params.row;
-          return alert(JSON.stringify(currentRow, null, 4));
-        };
-
-        return (
-          <Stack direction="row" spacing={2}>
-            <Button
-              variant="outlined"
-              color="warning"
-              size="small"
-              onClick={onClick}
-            >
-              Edit
-            </Button>
-          </Stack>
-        );
-      },
     },
   ];
   const rows = [
@@ -190,10 +184,15 @@ export default function Profile() {
   const handleDeleteAll = () => {
     console.log(arrId);
   };
+  // Nếu localstorage không có token => Navigate to login
+  if (!localStorage.getItem("userLogin")) {
+    alert("Phải đăng nhập !");
+    return <Navigate to="/login" />;
+  }
   return (
     <Container>
       <Box>
-        <Typography>Profile</Typography>
+        <Typography> Hello {userProfile?.email} !</Typography>
         <Grid
           paddingTop={10}
           container
@@ -202,23 +201,36 @@ export default function Profile() {
           minHeight={160}
         >
           <Grid item xs={10} sm={5}>
-            <img
-              src="../../../public/img/3062756a297f1e3c22e35f3fe89b3ecc-320.jpeg"
-              alt=""
-            />
+            <Avatar
+              sx={{ width: "200px", height: "200px" }}
+              src={userProfile?.avatar}
+            ></Avatar>
           </Grid>
           <Grid item xs={10} sm={5}>
-            <form className="">
+            <form className="" onSubmit={updateFrm.handleSubmit}>
               <div
                 className="wrap-input100 validate-input"
                 data-validate="Valid email is required: ex@abc.xyz"
               >
+                <label htmlFor="" style={{ marginLeft: "20px" }}>
+                  {" "}
+                  Email
+                </label>
                 <input
                   className="input100"
                   type="text"
                   name="email"
-                  placeholder="Email"
+                  value={userProfile?.email}
+                  disabled={true}
                 />
+                {updateFrm.errors.email && (
+                  <p
+                    style={{ color: "red ", marginLeft: "10px" }}
+                    className="alert  alert-danger"
+                  >
+                    {updateFrm.errors.email}{" "}
+                  </p>
+                )}
                 <span className="focus-input100" />
                 <span className="symbol-input100">
                   <i className="fa fa-envelope" aria-hidden="true" />
@@ -228,12 +240,26 @@ export default function Profile() {
                 className="wrap-input100 validate-input"
                 data-validate="Password is required"
               >
+                <label htmlFor="" style={{ marginLeft: "20px" }}>
+                  {" "}
+                  Password
+                </label>
                 <input
                   className="input100"
                   type="password"
-                  name="pass"
-                  placeholder="Password"
+                  name="password"
+                  placeholder="***********"
+                  onInput={updateFrm.handleChange}
+                  onBlur={updateFrm.handleBlur}
                 />
+                {updateFrm.errors.password && (
+                  <p
+                    style={{ color: "red ", marginLeft: "10px" }}
+                    className="alert  alert-danger"
+                  >
+                    {updateFrm.errors.password}{" "}
+                  </p>
+                )}
                 <span className="focus-input100" />
                 <span className="symbol-input100">
                   <i className="fa fa-lock" aria-hidden="true" />
@@ -243,12 +269,25 @@ export default function Profile() {
                 className="wrap-input100 validate-input"
                 data-validate="Password is required"
               >
+                <label htmlFor="" style={{ marginLeft: "20px" }}>
+                  Name
+                </label>
                 <input
                   className="input100"
                   type="text"
                   name="name"
-                  placeholder="Name"
+                  placeholder={userProfile?.name}
+                  onInput={updateFrm.handleChange}
+                  onBlur={updateFrm.handleBlur}
                 />
+                {updateFrm.errors.name && (
+                  <p
+                    style={{ color: "red ", marginLeft: "10px" }}
+                    className="alert  alert-danger"
+                  >
+                    {updateFrm.errors.name}{" "}
+                  </p>
+                )}
                 <span className="focus-input100" />
                 <span className="symbol-input100">
                   <i className="fa fa-lock" aria-hidden="true" />
@@ -258,12 +297,25 @@ export default function Profile() {
                 className="wrap-input100 validate-input"
                 data-validate="Password is required"
               >
+                <label htmlFor="" style={{ marginLeft: "20px" }}>
+                  Phone Number
+                </label>
                 <input
                   className="input100"
                   type="text"
                   name="phone"
-                  placeholder="Phone Number"
+                  placeholder={userProfile?.phone}
+                  onInput={updateFrm.handleChange}
+                  onBlur={updateFrm.handleBlur}
                 />
+                {updateFrm.errors.phone && (
+                  <p
+                    style={{ color: "red ", marginLeft: "10px" }}
+                    className="alert  alert-danger"
+                  >
+                    {updateFrm.errors.phone}{" "}
+                  </p>
+                )}
                 <span className="focus-input100" />
                 <span className="symbol-input100">
                   <i className="fa fa-lock" aria-hidden="true" />
@@ -277,25 +329,29 @@ export default function Profile() {
                   <p>Gender</p>
                   <input
                     className="form-check-input"
-                    id="gender1"
+                    id="true"
                     name="gender"
                     type="radio"
                     value={true}
+                    checked={selected === "true"}
+                    onChange={handleChange}
                   />
-                  <label for="gender1">Male</label>
+                  <label for="true">Male</label>
                   <input
                     className="form-check-input"
-                    id="gender2"
+                    id="false"
                     name="gender"
                     type="radio"
                     value={false}
+                    checked={selected === "false"}
+                    onChange={handleChange}
                   />{" "}
-                  <label for="gender2">Female</label>
+                  <label for="false">Female</label>
                 </div>
               </div>
               <div className="container-login100-form-btn">
                 <button type="submit" className="login100-form-btn">
-                  Submit
+                  Update
                 </button>
               </div>
             </form>
