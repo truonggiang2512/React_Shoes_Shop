@@ -32,7 +32,18 @@ export default function Product() {
     setExpanded(!expanded);
   };
   return (
-    <Container>
+    <Container sx={{ paddingTop: "50px" }}>
+      <Box
+        sx={{
+          textAlign: "center",
+          fontWeight: "600",
+          fontSize: "16px",
+          paddingBottom: "20px",
+        }}
+      >
+        {" "}
+        SHOP BY COLLECTION
+      </Box>
       <Grid container spacing={3} columns={12} minHeight={160}>
         <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ maxWidth: 345 }}>

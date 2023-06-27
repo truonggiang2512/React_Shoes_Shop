@@ -9,13 +9,10 @@ import ItemReview from "./ItemReview/ItemReview";
 export default function Home() {
   return (
     <div>
-      <Container maxWidth="xl">
-        <Carousel />
-        <Collection />
-        <ItemReview />
-        <Product />
-        <Blog />
-      </Container>
+      <Carousel />
+      <ItemReview />
+      <Product />
+      <Collection />
     </div>
   );
 }

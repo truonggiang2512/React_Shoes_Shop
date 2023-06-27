@@ -13,7 +13,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Navigate } from "react-router-dom";
 
 // Drawer
-import { Badge, Button, Container, Drawer } from "@mui/material";
+import { Badge, Button, Container, Drawer, Typography } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -211,12 +211,31 @@ export default function Header() {
         >
           <AccountCircle />
         </IconButton>
-        <NavLink to="profile">Profile</NavLink>
       </MenuItem>
-      <MenuItem sx={{ marginRight: "10px" }}>
-        <NavLink to="cart">
-          <AddShoppingCartIcon />
-          <p style={{ marginBottom: "20px", color: "red" }}>{cart.length}</p>
+      <MenuItem>
+        <NavLink to="cart" style={{ paddingLeft: "10px" }}>
+          <AddShoppingCartIcon
+            size="large"
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          />{" "}
+        </NavLink>
+      </MenuItem>
+      <MenuItem>
+        <NavLink to="cart" style={{ paddingLeft: "10px", display: "block" }}>
+          <Box>Home</Box>
+        </NavLink>
+      </MenuItem>
+      <MenuItem>
+        <NavLink to="cart" style={{ paddingLeft: "10px" }}>
+          <Box>Shop</Box>
+        </NavLink>
+      </MenuItem>
+      <MenuItem>
+        <NavLink to="cart" style={{ paddingLeft: "10px" }}>
+          <Box>About Us</Box>
         </NavLink>
       </MenuItem>
     </Menu>
@@ -243,7 +262,6 @@ export default function Header() {
           sx={{ backgroundColor: "#fff", color: "black" }}
         >
           <Toolbar>
-            {/* <MuiDrawer /> */}
             <Box>
               <NavLink to="home">
                 <img
@@ -253,7 +271,6 @@ export default function Header() {
                 />
               </NavLink>
             </Box>
-
             <Search
               style={{
                 boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
@@ -271,24 +288,6 @@ export default function Header() {
             </Search>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              {/* <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
               <Box sx={{ marginTop: "10px" }}>{renderLogin()}</Box>
 
               <NavLink to="cart">
@@ -327,8 +326,61 @@ export default function Header() {
               >
                 <MoreIcon />
               </IconButton>
-            </Box>
+            </Box>{" "}
           </Toolbar>
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              justifyContent: "center",
+              gap: 3,
+              paddingBottom: "30px",
+            }}
+          >
+            <NavLink style={{ textDecoration: "none" }} to="home">
+              <Typography
+                sx={{
+                  fontWeight: "600",
+                  fontSize: "16px",
+                  textDecoration: "none",
+                }}
+              >
+                Home
+              </Typography>
+            </NavLink>
+            <NavLink style={{ textDecoration: "none" }} to="shop">
+              <Typography
+                sx={{
+                  fontWeight: "600",
+                  fontSize: "16px",
+                  textDecoration: "none",
+                }}
+              >
+                Shop
+              </Typography>
+            </NavLink>
+            <NavLink style={{ textDecoration: "none" }} to="/">
+              <Typography
+                sx={{
+                  fontWeight: "600",
+                  fontSize: "16px",
+                  textDecoration: "none",
+                }}
+              >
+                About Us
+              </Typography>
+            </NavLink>
+            <NavLink style={{ textDecoration: "none" }} to="/">
+              <Typography
+                sx={{
+                  fontWeight: "600",
+                  fontSize: "16px",
+                  textDecoration: "none",
+                }}
+              >
+                Contact Us
+              </Typography>
+            </NavLink>
+          </Box>
         </AppBar>
         {renderMobileMenu}
         {renderMenu}

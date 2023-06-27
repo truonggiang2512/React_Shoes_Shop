@@ -28,9 +28,6 @@ export default function Login() {
   return (
     <div>
       <div>
-        <div>
-          <h1 style={{ textAlign: "center" }}>My Account</h1>
-        </div>
         <div className="limiter">
           <div className="container-login100">
             <div className="wrap-login100">

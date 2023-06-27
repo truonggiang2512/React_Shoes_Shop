@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { grey } from "@mui/material/colors";
-
+import "./carousel.css";
 export default class SimpleSlider extends Component {
   render() {
     const settings = {
@@ -23,89 +23,65 @@ export default class SimpleSlider extends Component {
       slidesToScroll: 1,
     };
     return (
-      <Container maxWidth={false} disableGutters>
-        <div>
-          <Slider {...settings}>
-            <div>
+      <div>
+        <Slider {...settings}>
+          <div className="background">
+            <Grid container spacing={2} columns={16}>
               <Grid
-                sx={{ bgcolor: grey[100] }}
-                container
-                spacing={2}
-                columns={16}
+                item
+                xs={8}
+                sx={{ textAlign: "center", alignItems: "center" }}
               >
-                <Grid
-                  item
-                  xs={8}
-                  sx={{ textAlign: "center", alignItems: "center" }}
+                {/* <Typography
+                  sx={{ fontWeight: "500", color: "#000" }}
+                  variant="h3"
+                  gutterBottom
                 >
-                  <Typography
-                    sx={{ fontWeight: "500", color: "#000" }}
-                    variant="h3"
-                    gutterBottom
-                  >
-                    Buy Lofer Shoes
-                  </Typography>
-                  <Typography variant="h4">
-                    {" "}
-                    <NavLink style={{ alignItems: "center" }}>
-                      {" "}
-                      View more
-                    </NavLink>
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <ListItem>
-                    <img
-                      style={{ width: "50%" }}
-                      src="https://shop.cyberlearn.vn/images/adidas-prophere.png"
-                      alt=""
-                    />
-                  </ListItem>
-                </Grid>
+                  Buy Lofer Shoes
+                </Typography>
+                <Typography variant="h4">
+                  {" "}
+                  <NavLink style={{ alignItems: "center" }}> View more</NavLink>
+                </Typography> */}
               </Grid>
-            </div>
+              <Grid item xs={8}>
+                <ListItem sx={{ minHeight: "60vh" }}></ListItem>
+              </Grid>
+            </Grid>
+          </div>
 
-            <Box>
+          {/* <Box className="background">
+            <Grid container spacing={2} columns={16}>
               <Grid
-                sx={{ bgcolor: grey[100] }}
-                container
-                spacing={2}
-                columns={16}
+                item
+                xs={8}
+                sx={{ textAlign: "center", alignItems: "center" }}
               >
-                <Grid
-                  item
-                  xs={8}
-                  sx={{ textAlign: "center", alignItems: "center" }}
+                <Typography
+                  sx={{ fontWeight: "500", color: "#000" }}
+                  variant="h3"
+                  gutterBottom
                 >
-                  <Typography
-                    sx={{ fontWeight: "500", color: "#000" }}
-                    variant="h3"
-                    gutterBottom
-                  >
-                    Buy Lofer Shoes
-                  </Typography>
-                  <Typography variant="h4">
-                    {" "}
-                    <NavLink style={{ alignItems: "center" }}>
-                      {" "}
-                      View more
-                    </NavLink>
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <ListItem>
-                    <img
-                      style={{ width: "50%" }}
-                      src="https://shop.cyberlearn.vn/images/adidas-prophere.png"
-                      alt=""
-                    />
-                  </ListItem>
-                </Grid>
+                  Buy Lofer Shoes
+                </Typography>
+                <Typography variant="h4">
+                  {" "}
+                  <NavLink style={{ alignItems: "center" }}> View more</NavLink>
+                </Typography>
               </Grid>
-            </Box>
-          </Slider>
-        </div>
-      </Container>
+              <Grid item xs={8}>
+                <ListItem>
+                  <img
+                    style={{ width: "50%" }}
+                    src="https://shop.cyberlearn.vn/images/adidas-prophere.png"
+                    alt=""
+                  />
+                </ListItem>
+              </Grid>
+            </Grid>
+          </Box> */}
+        </Slider>
+      </div>
     );
   }
 }

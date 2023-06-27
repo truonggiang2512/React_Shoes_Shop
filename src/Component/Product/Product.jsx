@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getallProductApi } from "../../Redux/Reducers/ProductReducer";
 import { addToCartAction } from "../../Redux/Reducers/CartReducer";
+import { grey } from "@mui/material/colors";
 export default function Product() {
   const renderAllProduct = () => {
     return arrProduct.map((item) => {
@@ -77,9 +78,56 @@ export default function Product() {
   return (
     <Box sx={{ marginTop: "40px" }}>
       <Box textAlign="center">
-        <Box style={{ margin: "0 20px", display: "inline" }}>123</Box>
-        <Box style={{ margin: "0 20px", display: "inline" }}>123</Box>
-        <Box style={{ margin: "0 20px", display: "inline" }}>123</Box>
+        <Button
+          sx={{
+            color: "#000",
+            margin: "0 20px",
+            display: "inline",
+            fontSize: "16px",
+            background: "#fff",
+            fontWeight: "600",
+            "&:hover": {
+              color: grey[500],
+              backgroundColor: "#fff",
+            },
+          }}
+        >
+          Popular
+        </Button>
+        <Button
+          sx={{
+            color: "#000",
+            margin: "0 20px",
+            display: "inline",
+            fontSize: "16px",
+            background: "#fff",
+            fontWeight: "600",
+
+            "&:hover": {
+              color: grey[500],
+              backgroundColor: "#fff",
+            },
+          }}
+        >
+          Latest
+        </Button>
+        <Button
+          sx={{
+            color: "#000",
+            margin: "0 20px",
+            display: "inline",
+            fontSize: "16px",
+            background: "#fff",
+            fontWeight: "600",
+
+            "&:hover": {
+              color: grey[500],
+              backgroundColor: "#fff",
+            },
+          }}
+        >
+          Top Seller
+        </Button>
       </Box>
       <Container>
         <Grid

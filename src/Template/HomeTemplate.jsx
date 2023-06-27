@@ -12,7 +12,7 @@ export default function HomeTemplate() {
   return (
     <Container maxWidth={false} disableGutters>
       <Header></Header>
-      <div style={{ paddingTop: 130, paddingBottom: 130 }}>
+      <div style={{ paddingTop: 165 }}>
         <Outlet></Outlet>
       </div>
       <footer style={{ backgroundColor: grey[100], paddingTop: "50px" }}>
