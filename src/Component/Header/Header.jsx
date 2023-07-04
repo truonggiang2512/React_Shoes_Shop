@@ -11,6 +11,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Navigate } from "react-router-dom";
+import { useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 
 // Drawer
 import { Badge, Button, Container, Drawer, Typography } from "@mui/material";
@@ -21,6 +23,7 @@ import { deleteCookie, USER_LOGIN } from "../../Utils/config";
 import { loginAction } from "../../Redux/Reducers/userReducer";
 
 //theme function
+
 const reloadRender = () => {
   window.location.reload();
   localStorage.removeItem(USER_LOGIN);
@@ -133,10 +136,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { cart } = useSelector((state) => state.CartReducer);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const keywordRef = useRef("");
+  const handleChange = (e) => {
+    const { value, id } = e.target;
+    console.log(value);
+    keywordRef.current = value;
+    setSearchParams({ keyword: keywordRef.current });
+  };
+  const handleSubmit = () => {};
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -229,7 +240,7 @@ export default function Header() {
         </NavLink>
       </MenuItem>
       <MenuItem>
-        <NavLink to="cart" style={{ paddingLeft: "10px" }}>
+        <NavLink to="search" style={{ paddingLeft: "10px" }}>
           <Box>Shop</Box>
         </NavLink>
       </MenuItem>
@@ -279,10 +290,13 @@ export default function Header() {
               }}
             >
               <SearchIconWrapper>
-                <SearchIcon />
+                <SearchIcon sx={{ cursor: "pointer" }} />
               </SearchIconWrapper>
               <StyledInputBase
                 placeholder="Search…"
+                onInput={handleChange}
+                id="keyword"
+                name="keyword"
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
@@ -347,7 +361,7 @@ export default function Header() {
                 Home
               </Typography>
             </NavLink>
-            <NavLink style={{ textDecoration: "none" }} to="shop">
+            <NavLink style={{ textDecoration: "none" }} to="search">
               <Typography
                 sx={{
                   fontWeight: "600",
