@@ -5,7 +5,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Stack } from "@mui/system";
 import { Button } from "@mui/base";
 import Avatar from "@mui/material/Avatar";
-import { Navigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,16 +13,12 @@ import {
   updateProfile,
   updateProfileAction,
 } from "../../Redux/Reducers/userReducer";
-import { getStoreJson, USER_LOGIN } from "../../Utils/config";
 
 export default function Profile() {
   const { userProfile } = useSelector((state) => state.userReducer);
-  console.log(userProfile, "123");
-  getStoreJson(USER_LOGIN);
   const [selected, setSelected] = useState(`${userProfile?.gender}`);
 
   const handleChange = (event) => {
-    console.log(event.target.value);
     setSelected(event.target.value);
   };
   const dispatch = useDispatch();
@@ -34,13 +29,11 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    //vừa vào trang dispatch api getprofile
     getProfileApiFunction();
   }, []);
-  const email = USER_LOGIN?.email;
   const updateFrm = useFormik({
     initialValues: {
-      email: `${email}`,
+      email: ``,
       password: "",
       gender: "true",
       name: "",
@@ -91,12 +84,10 @@ export default function Profile() {
       renderCell: (params) => {
         const onClickTang = (e) => {
           const currentRow = params.row.quality;
-          // return alert(JSON.stringify(currentRow, null, 4));
           return setValue(value + 1);
         };
         const onClickGiam = (e) => {
           const currentRow = params.row.quality;
-          // return alert(JSON.stringify(currentRow, null, 4));
           return setValue(value - 1);
         };
 
@@ -180,15 +171,6 @@ export default function Profile() {
   ];
   const [arrId, setArrId] = useState([]);
   const [value, setValue] = useState(1);
-
-  const handleDeleteAll = () => {
-    console.log(arrId);
-  };
-  // Nếu localstorage không có token => Navigate to login
-  if (!localStorage.getItem("userLogin")) {
-    alert("Phải đăng nhập !");
-    return <Navigate to="/login" />;
-  }
   return (
     <Container>
       <Box>
@@ -213,7 +195,6 @@ export default function Profile() {
                 data-validate="Valid email is required: ex@abc.xyz"
               >
                 <label htmlFor="" style={{ marginLeft: "20px" }}>
-                  {" "}
                   Email
                 </label>
                 <input

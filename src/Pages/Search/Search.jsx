@@ -1,20 +1,13 @@
-import Button from "@mui/material/Button";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Rating,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
-import { Box, Container } from "@mui/system";
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
-import { getallProductApi } from "../../Redux/Reducers/ProductReducer";
-import Shuffle from "shufflejs";
+import React, { useEffect, useState } from "react";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { Box, Container, Grid } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import { useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Search() {
   const { arrProduct } = useSelector((state) => state.productReducer);
@@ -22,202 +15,148 @@ export default function Search() {
   const [shuffle, setShuffle] = useState(null);
   const [filterKey, setFilterKey] = useState("*");
 
-  /* Hook Init */
-  const shuffleRef = useRef();
-
-  const createShuffle = () => {
-    setShuffle(
-      new Shuffle(shuffleRef.current, {
-        itemSelector: ".filter-item",
-        speed: 500,
-        staggerAmount: 100,
-        useTransforms: true,
-      })
-    );
-  };
-
-  //-----------------
-  const filterProduct = (keyFilter) => {
-    if (shuffle) {
-      setFilterKey(keyFilter);
-      console.log("keyfilter", keyFilter);
+  // const renderSearch = () => {
+  //   if (isEmpty) {
+  //     return arrSearch.data?.map((item: any, key: any) => {
+  //       return (
+  //         <Grid item xs={4}>
+  //           <NavLink
+  //             style={{ textDecoration: "none", color: "none" }}
+  //             to={`/detail/${item?.id}`}
+  //           >
+  //             <Box sx={{ Width: 280, boder: "none", color: "primary.main" }}>
+  //               <Box sx={{ cursor: "pointer" }}>
+  //                 <CardMedia
+  //                   sx={{
+  //                     borderRadius: 2,
+  //                     height: { md: "160px", xs: "210px", sm: "160px" },
+  //                   }}
+  //                   component="img"
+  //                   width="100%"
+  //                   image={item.congViec.hinhAnh}
+  //                   alt="green iguana"
+  //                 />
+  //                 <CardContent sx={{ padding: "10px 0 0 0 " }}>
+  //                   <Box
+  //                     sx={{ display: "flex", justifyContent: "space-between" }}
+  //                   >
+  //                     <Stack direction="row" spacing={1}>
+  //                       <Box>
+  //                         <Avatar
+  //                           alt="Remy Sharp"
+  //                           src="/static/images/avatar/1.jpg"
+  //                           sx={{ width: 24, height: 24 }}
+  //                         />
+  //                       </Box>
+  //                       <Box sx={{ display: "flex", alignItems: "center" }}>
+  //                         <Typography variant="body2">Docute</Typography>
+  //                       </Box>
+  //                     </Stack>
+  //                     <Box>
+  //                       <Typography variant="subtitle1">Level 10</Typography>
+  //                     </Box>
+  //                   </Box>
+  //                   <Box pt={2}>
+  //                     <Typography
+  //                       sx={{
+  //                         overflow: "hidden",
+  //                         display: "-webkit-box",
+  //                         textOverflow: "ellipsis",
+  //                         whiteSpace: "normal",
+  //                         WebkitLineClamp: 2,
+  //                         WebkitBoxOrient: "vertical",
+  //                         msTextOverflow: "ellipsis",
+  //                       }}
+  //                       variant="subtitle1"
+  //                       color="text.main"
+  //                     >
+  //                       {item.congViec.tenCongViec}
+  //                     </Typography>
+  //                   </Box>
+  //                   <Box sx={{ display: "flex" }} py={2}>
+  //                     <StarIcon />
+  //                     <Typography
+  //                       style={{ display: "inline-block" }}
+  //                       variant="subtitle2"
+  //                     >
+  //                       {item.congViec.saoCongViec}
+  //                     </Typography>
+  //                     <Typography
+  //                       style={{
+  //                         display: "inline-block",
+  //                         fontWeight: "300",
+  //                         paddingLeft: "5px",
+  //                       }}
+  //                       variant="subtitle2"
+  //                     >
+  //                       ({item.congViec.danhGia})
+  //                     </Typography>
+  //                   </Box>
+  //                   <Box>
+  //                     <Typography
+  //                       style={{
+  //                         display: "inline-block",
+  //                         fontSize: "16px",
+  //                         fontWeight: "600",
+  //                       }}
+  //                     >
+  //                       From US${item.congViec.giaTien}
+  //                     </Typography>
+  //                   </Box>
+  //                 </CardContent>
+  //               </Box>
+  //             </Box>
+  //           </NavLink>
+  //         </Grid>
+  //       );
+  //     });
+  //   } else {
+  //     return <Box></Box>;
+  //   }
+  // };
+  const renderSearchFalse = () => {
+    if (isEmpty) {
+      return <Box></Box>;
     } else {
-      createShuffle();
-      setFilterKey(keyFilter);
-      Shuffle.ALL_ITEMS = "*";
-    }
-  };
-
-  useEffect(() => {
-    if (shuffle) {
-      shuffle.sort({});
-      shuffle.filter(filterKey);
-      setShoesTotal(shuffle.sortedItems.length);
-    }
-  }, [filterKey]);
-  //--------------------
-  const dispatch = useDispatch();
-
-  const getProductApi = () => {
-    const action = getallProductApi();
-    dispatch(action);
-  };
-  useEffect(() => {
-    getProductApi();
-  }, []);
-
-  const renderAllProduct = () => {
-    return arrProduct.map((item) => {
       return (
-        <Grid
-          item
-          xs={16}
-          md={5}
-          lg={4}
-          sm={8}
-          key={item.id}
-          data-groups={JSON.stringify(item?.categories[0]?.id)}
-        >
-          <Card className="filter-item">
-            <React.Fragment>
-              <CardContent sx={{ boxSizing: "border-box", padding: "0px" }}>
-                <NavLink
-                  to={`/detail/${item.id}`}
-                  style={{ textAlign: "center", cursor: "pointer" }}
-                >
-                  <img style={{ width: "100%" }} src={item.image} alt="" />
-                </NavLink>
-                <Box sx={{ textAlign: "center" }}>
-                  <Rating name="read-only" value={5} readOnly />
-                </Box>
-                <Typography
-                  style={{ textAlign: "center" }}
-                  variant="h6"
-                  component="div"
-                >
-                  {item.name}
-                </Typography>
-
-                <Typography style={{ textAlign: "center" }} variant="body2">
-                  ${item.price}
-                </Typography>
-              </CardContent>
-              <CardActions sx={{ justifyContent: "center" }}>
-                <Button
-                  onClick={() => {
-                    const action = addToCartAction(item);
-                    dispatch(action);
-                    console.log(action);
-                  }}
-                  style={{
-                    backgroundColor: "black",
-                    padding: "10px 25px",
-                    borderRadius: "12px",
-                    color: "#fff",
-                  }}
-                  size="small"
-                >
-                  Add To Cart
-                </Button>
-              </CardActions>
-            </React.Fragment>
-          </Card>
-        </Grid>
+        <Box sx={{ textAlign: "center" }}>
+          <Box px={4} py={4}>
+            <Box>
+              <Box sx={{ margin: "auto", width: "auto" }}>
+                <img
+                  width="45%"
+                  src="https://fiverr-res.cloudinary.com/npm-assets/@fiverr/search_perseus/empty-search-results.aabcd99.png"
+                  alt=""
+                />
+              </Box>
+            </Box>
+            <Box py={2}>
+              <Typography variant="h5">
+                <h2>No Services Found For Your Search</h2>
+              </Typography>
+              <Typography variant="subtitle1">
+                Try a new search or get a free quote for your project from our
+                community of freelancers.
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
       );
-    });
+    }
   };
 
   return (
     <>
-      <Container sx={{ paddingTop: "100px" }}>
-        <Tabs value={filterKey} onChange={filterProduct}>
-          <Tab value="*" label="All Shoes" />
-          <Tab value="VANS_CONVERSE" label="Vans" />
-          <Tab value="ADIDAS" label="Adidas" />
-          <Tab value="NIKE" label="Nike" />
-        </Tabs>
-
-        <Box position="apart" display="none">
-          <Typography>Category</Typography>
+      <Container sx={{ py: 5 }} maxWidth="lg">
+        <Typography variant="h2">
+          Results for <b>{}</b>
+        </Typography>
+        <Box my={2}>
+          {/* <Grid container spacing={2} columns={{ xs: 4, sm: 12, md: 16 }}>
+            {renderSearch()}
+          </Grid> */}
+          {/* {renderSearchFalse()} */}
         </Box>
-        <Grid
-          sx={{ paddingTop: "50px" }}
-          container
-          spacing={3}
-          columns={16}
-          minHeight={160}
-          ref={shuffleRef}
-        >
-          {arrProduct?.map((item, index) => {
-            const key = item ? item.id : index;
-            console.log(JSON.stringify(item?.categories[0]?.id), "key");
-            return (
-              <Grid
-                item
-                xs={16}
-                md={5}
-                lg={4}
-                sm={8}
-                key={key}
-                data-groups={JSON.stringify(item?.categories[0]?.id)}
-              >
-                <Card className="filter-item">
-                  <React.Fragment>
-                    <CardContent
-                      sx={{ boxSizing: "border-box", padding: "0px" }}
-                    >
-                      <NavLink
-                        to={`/detail/${item.id}`}
-                        style={{ textAlign: "center", cursor: "pointer" }}
-                      >
-                        <img
-                          style={{ width: "100%" }}
-                          src={item.image}
-                          alt=""
-                        />
-                      </NavLink>
-                      <Box sx={{ textAlign: "center" }}>
-                        <Rating name="read-only" value={5} readOnly />
-                      </Box>
-                      <Typography
-                        style={{ textAlign: "center" }}
-                        variant="h6"
-                        component="div"
-                      >
-                        {item.name}
-                      </Typography>
-
-                      <Typography
-                        style={{ textAlign: "center" }}
-                        variant="body2"
-                      >
-                        ${item.price}
-                      </Typography>
-                    </CardContent>
-                    <CardActions sx={{ justifyContent: "center" }}>
-                      <Button
-                        onClick={() => {
-                          const action = addToCartAction(item);
-                          dispatch(action);
-                          console.log(action);
-                        }}
-                        style={{
-                          backgroundColor: "black",
-                          padding: "10px 25px",
-                          borderRadius: "12px",
-                          color: "#fff",
-                        }}
-                        size="small"
-                      >
-                        Add To Cart
-                      </Button>
-                    </CardActions>
-                  </React.Fragment>
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
       </Container>
     </>
   );

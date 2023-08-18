@@ -9,7 +9,6 @@ import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import "./login.css";
 
 export default function Login() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const loginFrm = useFormik({
     initialValues: {
@@ -21,6 +20,7 @@ export default function Login() {
       password: yup.string().required("password cannot be blank"),
     }),
     onSubmit: (values) => {
+      console.log(values);
       const action = loginActionApi(values);
       dispatch(action);
     },

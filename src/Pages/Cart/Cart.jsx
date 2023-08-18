@@ -124,12 +124,7 @@ export default function Cart() {
       url: `https://shop.cyberlearn.vn/api/Users/order`,
       method: "POST",
     });
-    //Đưa dữ liệu lấy tự api về vào state
   };
-  if (!localStorage.getItem("userLogin")) {
-    alert("Phải đăng nhập !");
-    return <Navigate to="/login" />;
-  }
   return (
     <Container>
       <Box>

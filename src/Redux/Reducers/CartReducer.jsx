@@ -27,7 +27,6 @@ const CartReducer = createSlice({
     addToCartAction: (state, action) => {
       let productClick = { ...action.payload };
       productClick.quantity = 1;
-      //Kiểm tra có trong giỏ hàng chưa => nếu chưa thì thêm vào nếu có rồi thì tăng số lượng
       let prodCart = state.cart.find((pro) => pro.id == productClick.id);
       console.log("prodCart", prodCart);
       if (prodCart) {
@@ -73,7 +72,7 @@ export default CartReducer.reducer;
 // post Product
 export const postProductApi = () => {
   return async (dispatch) => {
-    const res = await http.post("/api/Users/order", orderDetail, email);
+    const res = await http.post("Users/order", orderDetail, email);
     console.log(res.data.conent);
   };
 };
