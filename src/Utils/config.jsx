@@ -14,8 +14,8 @@ export const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     config.headers = { ...config.headers };
-    let token = storage.get(TOKEN);
-    config.headers.token = `${token}`;
+    let token = storage.get(USER_LOGIN);
+    config.headers.Authorization = ` Bearer ${token.accessToken}`;
     config.headers.tokenCybersoft = `${TOKEN_CYBERSOFT}`;
     return config;
   },
