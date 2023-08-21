@@ -40,6 +40,7 @@ export default function Header() {
     setIsDrawerOpen(false);
   };
   const token = storage.get(TOKEN);
+  storage.save("CartList", "");
   console.log(token, "header");
   const submitSearch = (event) => {
     event.preventDefault();
