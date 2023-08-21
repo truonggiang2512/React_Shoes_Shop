@@ -25,7 +25,7 @@ import { grey } from "@mui/material/colors";
 export default function Product() {
   const params = useParams();
   const [open, setOpen] = React.useState(false);
-
+  const { arrProduct } = useSelector((state) => state.productReducer);
   const handleAlertOpen = () => {
     setOpen(true);
   };
@@ -89,7 +89,7 @@ export default function Product() {
       );
     });
   };
-  const { arrProduct } = useSelector((state) => state.productReducer);
+
   const dispatch = useDispatch();
   const getProductApi = () => {
     const action = getallProductApi();
