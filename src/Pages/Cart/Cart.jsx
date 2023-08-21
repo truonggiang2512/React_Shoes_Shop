@@ -1,17 +1,15 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/base";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeQuantityAction,
   delProductAction,
   postProductAction,
-  postProductApi,
 } from "../../Redux/Reducers/CartReducer";
 import { http } from "../../Utils/config";
-import axios from "axios";
-import { Navigate } from "react-router-dom";
+import storage from "../../Utils/storage";
+import { USER_LOGIN } from "../../Utils/constant";
 
 export default function Cart() {
   const columns = [
@@ -40,7 +38,7 @@ export default function Cart() {
         return (
           <Stack direction="row" spacing={2}>
             <Box>
-              <Button
+              <button
                 variant="outlined"
                 style={{ marginRight: "10px" }}
                 onClick={() => {
@@ -58,9 +56,9 @@ export default function Cart() {
                 }}
               >
                 -
-              </Button>
+              </button>
               {params.row.quantity}
-              <Button
+              <button
                 variant="outlined"
                 style={{ marginLeft: "10px" }}
                 onClick={() => {
@@ -73,7 +71,7 @@ export default function Cart() {
                 }}
               >
                 +
-              </Button>
+              </button>
             </Box>
           </Stack>
         );
@@ -113,18 +111,12 @@ export default function Cart() {
 
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.CartReducer);
-  console.log(cart);
   const { orderDetail } = useSelector((state) => state.CartReducer);
-  const postProductApi = async (id, quantity) => {
-    const result = await http.post("/api/Users/order", { id, quantity });
-    //Đưa dữ liệu lấy tự api về vào state
-  };
-  const getProductDetailApi = async () => {
-    const result = await axios({
-      url: `https://shop.cyberlearn.vn/api/Users/order`,
-      method: "POST",
-    });
-  };
+  const [rows, setRows] = useState(cart);
+  useEffect(() => {
+    setRows(cart);
+  }, [cart]);
+  const email = storage.get(USER_LOGIN);
   return (
     <Container>
       <Box>
@@ -134,7 +126,7 @@ export default function Cart() {
         <Box sx={{ marginTop: "40px" }}>
           <div style={{ height: 400, width: "100%" }}>
             <DataGrid
-              rows={cart}
+              rows={rows}
               columns={columns}
               getRowId={(row) => row.id}
               initialState={{
@@ -147,26 +139,27 @@ export default function Cart() {
             />
           </div>
         </Box>
-        <Button
-          style={{
-            padding: "10px 20px 10px 20px ",
-            background: "green",
-            marginTop: "10px",
-            textAlign: "right",
-            fontSize: "20px",
-          }}
-          size="small"
-          onClick={() => {
-            cart?.map((item) => {
-              const action = postProductAction(item);
-
-              dispatch(action);
-              postProductApi();
-            });
-          }}
-        >
-          Submit Order
-        </Button>
+        <Box py={2} sx={{ display: "flex", gap: 1 }}>
+          <Box>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => {
+                return cart.map((item) => {
+                  const action = postProductAction(item);
+                  dispatch(action);
+                });
+              }}
+            >
+              Save Order
+            </Button>
+          </Box>
+          <Box px={10}>
+            <Button variant="contained" onClick={() => {}}>
+              Submit Order
+            </Button>
+          </Box>
+        </Box>
       </Box>
     </Container>
   );

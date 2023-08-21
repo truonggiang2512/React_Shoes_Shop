@@ -39,7 +39,7 @@ export default function Register() {
     onSubmit: async (values) => {
       console.log(values);
       try {
-        const res = await http.post("/api/Users/signup", values);
+        const res = await http.post("Users/signup", values);
         alert(res.data?.message);
         navigate("/login");
       } catch (err) {

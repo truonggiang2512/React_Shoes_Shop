@@ -5,7 +5,14 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Container, Divider, Grid, ListItem } from "@mui/material";
+import {
+  Alert,
+  Container,
+  Divider,
+  Grid,
+  ListItem,
+  Snackbar,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import { NavLink, useParams } from "react-router-dom";
 import Rating from "@mui/material/Rating";
@@ -17,6 +24,19 @@ import { grey } from "@mui/material/colors";
 
 export default function Product() {
   const params = useParams();
+  const [open, setOpen] = React.useState(false);
+
+  const handleAlertOpen = () => {
+    setOpen(true);
+  };
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
   const renderAllProduct = () => {
     return arrProduct.map((item) => {
       return (
@@ -50,7 +70,7 @@ export default function Product() {
                   onClick={() => {
                     const action = addToCartAction(item);
                     dispatch(action);
-                    console.log(action);
+                    handleAlertOpen();
                   }}
                   style={{
                     backgroundColor: "black",
@@ -71,7 +91,6 @@ export default function Product() {
   };
   const { arrProduct } = useSelector((state) => state.productReducer);
   const dispatch = useDispatch();
-  console.log(arrProduct);
   const getProductApi = () => {
     const action = getallProductApi();
     dispatch(action);
@@ -95,6 +114,21 @@ export default function Product() {
           {renderAllProduct()}
         </Grid>
       </Container>
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleAlertClose}
+        >
+          <Alert
+            onClose={handleAlertClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Add to Cart successful!!!
+          </Alert>
+        </Snackbar>
+      </Stack>
     </Box>
   );
 }

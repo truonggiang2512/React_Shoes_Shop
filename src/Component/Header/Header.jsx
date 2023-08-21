@@ -3,8 +3,12 @@ import { Container } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import ChecklistRtlIcon from "@mui/icons-material/ChecklistRtl";
 import {
+  Avatar,
   Button,
+  Divider,
   InputAdornment,
+  Menu,
+  MenuItem,
   SvgIcon,
   TextField,
   Typography,
@@ -22,9 +26,10 @@ import Login from "../../Pages/Login/Login";
 import Profile from "../../Pages/Profile/Profile";
 import Register from "../../Pages/Register/Register";
 import storage from "../../Utils/storage";
-import { USER_LOGIN } from "../../Utils/constant";
+import { USER_LOGIN, USER_PROFILE } from "../../Utils/constant";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { searchNameAsync } from "../../Redux/Reducers/SearchReducer/searchReducer";
+import { TOKEN } from "../../Utils/config";
 export default function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,7 +39,7 @@ export default function Header() {
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
   };
-  const token = storage.get(USER_LOGIN);
+  const token = storage.get(TOKEN);
   console.log(token, "header");
   const submitSearch = (event) => {
     event.preventDefault();
@@ -44,27 +49,21 @@ export default function Header() {
     dispatch(actionApiSearch);
     navigate("/search");
   };
+  // Menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  //
   const isDisableLogin = () => {
     if (token) {
       return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Box sx={{ display: { md: "flex", xs: "none" } }}>
-            <Tooltip title="Notification">
-              <IconButton>
-                <NotificationsNoneIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Messages">
-              <IconButton>
-                <MailOutlineIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Lists">
-              <IconButton>
-                <FavoriteBorderIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
+          <Box sx={{ display: { md: "flex", xs: "none" } }}></Box>
           <Button
             onClick={() => {
               navigate("cart");
@@ -72,13 +71,52 @@ export default function Header() {
           >
             <ShoppingCartCheckoutIcon />
           </Button>
-          <Button
-            onClick={() => {
-              navigate("profile");
+          <Tooltip title="Account settings">
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              <Avatar
+                sx={{ width: 32, height: 32 }}
+                src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/361344934_1100760674218876_329432079406950113_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=jaRnAGDKEZcAX973Gjd&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfB54hg0gRIiuIO__nVoz8IqICjiftDdc_b2Q3gRRhLq8A&oe=64C83E0A"
+              />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
             }}
           >
-            Profile
-          </Button>
+            <MenuItem
+              onClick={() => {
+                navigate("profile");
+              }}
+            >
+              Profile
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleClose}>
+              <Typography
+                variant="subtitle1"
+                onClick={() => {
+                  storage.clear(TOKEN);
+                  storage.clear(USER_LOGIN);
+                  storage.clear(USER_PROFILE);
+                  storage.clear("CartList");
+                  window.location.pathname = "/home";
+                }}
+              >
+                Log out
+              </Typography>
+            </MenuItem>
+          </Menu>
         </Box>
       );
     } else {
@@ -116,11 +154,12 @@ export default function Header() {
         <Box
           px={2}
           sx={{
-            border: 1,
+            borderBottom: 1,
             display: "flex",
             alignItems: "center",
             width: "100vw",
             justifyContent: "space-between",
+            height: "10vh",
           }}
         >
           <Box sx={{ display: { xs: "block", md: "none" } }}>

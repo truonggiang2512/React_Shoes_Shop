@@ -15,11 +15,23 @@ import {
 } from "../../Redux/Reducers/userReducer";
 import storage from "../../Utils/storage";
 import { USER_LOGIN } from "../../Utils/constant";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 export default function Profile() {
   const { userProfile } = useSelector((state) => state.userReducer);
+  const orderRow = useSelector((state) => state.userReducer.orderProfile);
   const [selected, setSelected] = useState(`${userProfile?.gender}`);
-
+  const [rows, setRows] = useState(orderRow);
+  useEffect(() => {
+    setRows(orderRow);
+  }, [orderRow]);
   const handleChange = (event) => {
     setSelected(event.target.value);
   };
@@ -61,118 +73,6 @@ export default function Profile() {
     },
   });
 
-  const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    {
-      field: "image",
-      headerName: "Image",
-      width: 160,
-      renderCell: (params) => {
-        return (
-          <>
-            <img src={params.value} width={100} alt="" />
-          </>
-        );
-      },
-    },
-    { field: "name", headerName: "Name", width: 160 },
-    {
-      field: "quality",
-      headerName: "Quality",
-      width: 120,
-      sortable: false,
-      disableClickEventBubbling: true,
-
-      renderCell: (params) => {
-        const onClickTang = (e) => {
-          const currentRow = params.row.quality;
-          return setValue(value + 1);
-        };
-        const onClickGiam = (e) => {
-          const currentRow = params.row.quality;
-          return setValue(value - 1);
-        };
-
-        return (
-          <Stack direction="row" spacing={2}>
-            <Button variant="outlined" size="small" onClick={onClickGiam}>
-              -
-            </Button>
-            <h4>{value}</h4>
-            <Button variant="outlined" size="small" onClick={onClickTang}>
-              +
-            </Button>
-          </Stack>
-        );
-      },
-    },
-    {
-      field: "price",
-      headerName: "Price",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      valueGetter: (params) => params.row.price * value,
-    },
-  ];
-  const rows = [
-    {
-      id: 1,
-      image: "https://shop.cyberlearn.vn/images/adidas-prophere.png",
-      name: "Jon",
-      price: 1000,
-    },
-    {
-      id: 2,
-      image: "https://shop.cyberlearn.vn/images/adidas-prophere.png",
-      name: "Cersei",
-      price: 3000,
-    },
-    {
-      id: 3,
-      image: "https://shop.cyberlearn.vn/images/adidas-prophere.png",
-      name: "Jaime",
-      price: 1000,
-    },
-    {
-      id: 4,
-      image: "https://shop.cyberlearn.vn/images/adidas-prophere.png",
-      name: "Arya",
-      price: 1000,
-    },
-    {
-      id: 5,
-      image: "https://shop.cyberlearn.vn/images/adidas-prophere.png",
-      name: "Daenerys",
-      price: 1000,
-    },
-    {
-      id: 6,
-      image: "https://shop.cyberlearn.vn/images/adidas-prophere.png",
-      name: null,
-      price: 1000,
-    },
-    {
-      id: 7,
-      image: "https://shop.cyberlearn.vn/images/adidas-prophere.png",
-      name: "Ferrara",
-      price: 1000,
-    },
-    {
-      id: 8,
-      image: "https://shop.cyberlearn.vn/images/adidas-prophere.png",
-      name: "Rossini",
-      price: 1000,
-    },
-    {
-      id: 9,
-      image: "https://shop.cyberlearn.vn/images/adidas-prophere.png",
-      name: "Harvey",
-      price: 1000,
-    },
-  ];
-  const [arrId, setArrId] = useState([]);
-  const [value, setValue] = useState(1);
   return (
     <Container>
       <Box py={3}>
@@ -338,22 +238,44 @@ export default function Profile() {
         <hr />
         <Typography>Oder History</Typography>
         <Box>
-          <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
-              }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
-              onRowSelectionModelChange={(id) => {
-                setArrId(id);
-              }}
-            />
-          </div>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Image</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>Price</TableCell>
+                  <TableCell>Quantity</TableCell>
+                  <TableCell>Total</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {orderRow.map((item, index) =>
+                  item?.orderDetail.map((product) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <p>{product.name}</p>
+                      </TableCell>
+                      <TableCell>
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          width="50"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <p>{product.shortDescription}</p>
+                      </TableCell>
+                      <TableCell>${product.price}</TableCell>
+                      <TableCell>{product.quantity}</TableCell>
+                      <TableCell>${product.price}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       </Box>
     </Container>

@@ -20,7 +20,6 @@ export default function Login() {
       password: yup.string().required("password cannot be blank"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       const action = loginActionApi(values);
       dispatch(action);
     },

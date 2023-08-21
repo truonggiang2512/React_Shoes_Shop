@@ -12,7 +12,7 @@ export default function HomeTemplate() {
   return (
     <Container maxWidth={false} disableGutters>
       <Header></Header>
-      <Box paddingTop="50px">
+      <Box paddingTop="90px">
         <Outlet></Outlet>
       </Box>
 
