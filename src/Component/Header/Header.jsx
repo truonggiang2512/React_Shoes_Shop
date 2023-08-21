@@ -107,6 +107,10 @@ export default function Header() {
                 variant="subtitle1"
                 onClick={() => {
                   storage.clear(TOKEN);
+                  storage.clear(USER_LOGIN);
+                  storage.clear("CartList");
+                  storage.clear(USER_PROFILE);
+
                   window.location.pathname = "/home";
                 }}
               >
