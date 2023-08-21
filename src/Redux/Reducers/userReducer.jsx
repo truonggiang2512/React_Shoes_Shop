@@ -50,10 +50,10 @@ export const loginActionApi = (userLogin) => {
 export const getProfileApi = () => {
   return async (dispatch) => {
     const res = await http.post("Users/getProfile");
-    console.log(res);
+    const action = setProfileAction(res.data.content);
+    dispatch(action);
     if (res) {
       const action = storage.set(USER_PROFILE, res.data.content);
-
       dispatch(action);
     }
   };
@@ -63,7 +63,7 @@ export const updateProfile = (userUpdate) => {
     try {
       const res = await http.post("Users/updateProfile", userUpdate);
       g;
-      console.log(res.data.content);
+      location.reload();
     } catch (err) {
       console.log(err, "updateProfile");
     }

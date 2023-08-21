@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { http } from '../../../Utils/config';
 
 const initialState = {
@@ -6,7 +6,7 @@ const initialState = {
 }
 
 const searchReducer = createSlice({
-  name: second,
+  name: "searchReducer",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -28,8 +28,14 @@ export const searchNameAsync = createAsyncThunk(
   "searchNameAsync",
   async (search) => {
     try {
-      const res = await http.get(`Product`, search);
-      return res.data.content;
+      const res = await http.get(`Product?keyword=${search}`,);
+      const dataWithTenCongViec = {
+        search: search,
+        data: res.data.content || [],
+      };
+      console.log(dataWithTenCongViec);
+      return dataWithTenCongViec;
+
     } catch (error) {
       console.error("Error during fetching jobs:", error);
       throw error;

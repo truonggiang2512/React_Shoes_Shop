@@ -12,9 +12,10 @@ export default function HomeTemplate() {
   return (
     <Container maxWidth={false} disableGutters>
       <Header></Header>
-      <div style={{ paddingTop: 165 }}>
+      <Box paddingTop="50px">
         <Outlet></Outlet>
-      </div>
+      </Box>
+
       <footer style={{ backgroundColor: grey[100], paddingTop: "50px" }}>
         <Container>
           <Grid container spacing={3} columns={14} minHeight={160}>

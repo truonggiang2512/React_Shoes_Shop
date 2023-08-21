@@ -81,66 +81,17 @@ export default function Product() {
   }, []);
   return (
     <Box sx={{ marginTop: "40px" }}>
-      <Box textAlign="center">
-        <Button
-          sx={{
-            color: "#000",
-            margin: "0 20px",
-            display: "inline",
-            fontSize: "16px",
-            background: "#fff",
-            fontWeight: "600",
-            "&:hover": {
-              color: grey[500],
-              backgroundColor: "#fff",
-            },
-          }}
-        >
-          Popular
-        </Button>
-        <Button
-          sx={{
-            color: "#000",
-            margin: "0 20px",
-            display: "inline",
-            fontSize: "16px",
-            background: "#fff",
-            fontWeight: "600",
-
-            "&:hover": {
-              color: grey[500],
-              backgroundColor: "#fff",
-            },
-          }}
-        >
-          Latest
-        </Button>
-        <Button
-          sx={{
-            color: "#000",
-            margin: "0 20px",
-            display: "inline",
-            fontSize: "16px",
-            background: "#fff",
-            fontWeight: "600",
-
-            "&:hover": {
-              color: grey[500],
-              backgroundColor: "#fff",
-            },
-          }}
-        >
-          Top Seller
-        </Button>
+      <Box sx={{ textAlign: "center" }}>
+        <Typography variant="h3">Product</Typography>
       </Box>
+
       <Container>
-        <Grid
-          sx={{ paddingTop: "50px" }}
-          container
-          spacing={3}
-          columns={16}
-          minHeight={160}
-        >
+        <Box sx={{ textAlign: "left", paddingBottom: 2 }}>
+          <Typography sx={{ fontWeight: 600 }} variant="h5">
+            Trend Alert
+          </Typography>
+        </Box>
+        <Grid container spacing={3} columns={16} minHeight={160}>
           {renderAllProduct()}
         </Grid>
       </Container>

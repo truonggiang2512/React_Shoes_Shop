@@ -31,55 +31,12 @@ export default class SimpleSlider extends Component {
                 item
                 xs={8}
                 sx={{ textAlign: "center", alignItems: "center" }}
-              >
-                {/* <Typography
-                  sx={{ fontWeight: "500", color: "#000" }}
-                  variant="h3"
-                  gutterBottom
-                >
-                  Buy Lofer Shoes
-                </Typography>
-                <Typography variant="h4">
-                  {" "}
-                  <NavLink style={{ alignItems: "center" }}> View more</NavLink>
-                </Typography> */}
-              </Grid>
+              ></Grid>
               <Grid item xs={8}>
                 <ListItem sx={{ minHeight: "60vh" }}></ListItem>
               </Grid>
             </Grid>
           </div>
-
-          {/* <Box className="background">
-            <Grid container spacing={2} columns={16}>
-              <Grid
-                item
-                xs={8}
-                sx={{ textAlign: "center", alignItems: "center" }}
-              >
-                <Typography
-                  sx={{ fontWeight: "500", color: "#000" }}
-                  variant="h3"
-                  gutterBottom
-                >
-                  Buy Lofer Shoes
-                </Typography>
-                <Typography variant="h4">
-                  {" "}
-                  <NavLink style={{ alignItems: "center" }}> View more</NavLink>
-                </Typography>
-              </Grid>
-              <Grid item xs={8}>
-                <ListItem>
-                  <img
-                    style={{ width: "50%" }}
-                    src="https://shop.cyberlearn.vn/images/adidas-prophere.png"
-                    alt=""
-                  />
-                </ListItem>
-              </Grid>
-            </Grid>
-          </Box> */}
         </Slider>
       </div>
     );

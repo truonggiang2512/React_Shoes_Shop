@@ -13,6 +13,8 @@ import {
   updateProfile,
   updateProfileAction,
 } from "../../Redux/Reducers/userReducer";
+import storage from "../../Utils/storage";
+import { USER_LOGIN } from "../../Utils/constant";
 
 export default function Profile() {
   const { userProfile } = useSelector((state) => state.userReducer);
@@ -27,13 +29,13 @@ export default function Profile() {
     const actionAsync = getProfileApi();
     dispatch(actionAsync);
   };
-
+  const emailStorage = storage.get(USER_LOGIN);
   useEffect(() => {
     getProfileApiFunction();
   }, []);
   const updateFrm = useFormik({
     initialValues: {
-      email: ``,
+      email: `${emailStorage?.email}`,
       password: "",
       gender: "true",
       name: "",
@@ -173,15 +175,9 @@ export default function Profile() {
   const [value, setValue] = useState(1);
   return (
     <Container>
-      <Box>
-        <Typography> Hello {userProfile?.email} !</Typography>
-        <Grid
-          paddingTop={10}
-          container
-          spacing={3}
-          columns={10}
-          minHeight={160}
-        >
+      <Box py={3}>
+        <Typography> Hello {userProfile?.name} !</Typography>
+        <Grid container spacing={3} columns={10} minHeight={160}>
           <Grid item xs={10} sm={5}>
             <Avatar
               sx={{ width: "200px", height: "200px" }}
@@ -201,7 +197,8 @@ export default function Profile() {
                   className="input100"
                   type="text"
                   name="email"
-                  value={userProfile?.email}
+                  initialValues={emailStorage?.email}
+                  value={emailStorage?.email}
                   disabled={true}
                 />
                 {updateFrm.errors.email && (

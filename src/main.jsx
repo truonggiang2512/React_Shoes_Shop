@@ -20,7 +20,6 @@ import Register from "./Pages/Register/Register.jsx";
 import Search from "./Pages/Search/Search.jsx";
 import { store } from "./Redux/configStore";
 import { createBrowserHistory } from "history";
-import { createBreakpoints } from "@mui/system";
 import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
 import theme from "./theme.js";
 
@@ -32,7 +31,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <HistoryRouter history={history}>
         <CssVarsProvider theme={theme}>
           <CssBaseline />
-
           <Routes>
             <Route path="" element={<HomeTemplate />}>
               <Route index element={<Home />}></Route>

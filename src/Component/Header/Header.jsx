@@ -24,15 +24,10 @@ import Register from "../../Pages/Register/Register";
 import storage from "../../Utils/storage";
 import { USER_LOGIN } from "../../Utils/constant";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
+import { searchNameAsync } from "../../Redux/Reducers/SearchReducer/searchReducer";
 export default function Header() {
-  const submitSearch = (event) => {
-    event.preventDefault();
-    let value = event.target.search.value;
-    // const actionApiSearch = searchJobAsync(value);
-    // dispatch(actionApiSearch);
-    // navigate("/search");
-  };
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleDrawerOpen = () => {
     setIsDrawerOpen(true);
   };
@@ -41,6 +36,14 @@ export default function Header() {
   };
   const token = storage.get(USER_LOGIN);
   console.log(token, "header");
+  const submitSearch = (event) => {
+    event.preventDefault();
+    let value = event.target.search.value;
+    console.log(value);
+    const actionApiSearch = searchNameAsync(value);
+    dispatch(actionApiSearch);
+    navigate("/search");
+  };
   const isDisableLogin = () => {
     if (token) {
       return (
