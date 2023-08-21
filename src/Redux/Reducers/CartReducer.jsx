@@ -3,7 +3,7 @@ import { http } from "../../Utils/config";
 import storage from "../../Utils/storage";
 const storeCart = storage.get("CartList");
 const initialState = {
-  cart: storeCart || "",
+  cart: storeCart || [],
   orderDetail: [],
   email: "ditconmemay@gmail.com",
 };
@@ -15,7 +15,7 @@ const CartReducer = createSlice({
     addToCartAction: (state, action) => {
       let productClick = { ...action.payload };
       productClick.quantity = 1;
-      let prodCart = state.cart.find((pro) => pro.id == productClick.id);
+      let prodCart = state.cart?.find((pro) => pro.id == productClick.id);
       if (prodCart) {
         prodCart.quantity += 1;
       } else {
