@@ -109,7 +109,6 @@ export default function Header() {
                 onClick={() => {
                   storage.clear(TOKEN);
                   storage?.clear(USER_LOGIN);
-                  storage?.clear("CartList");
                   window.location.pathname = "/home";
                 }}
               >
