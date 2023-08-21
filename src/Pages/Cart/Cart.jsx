@@ -111,12 +111,10 @@ export default function Cart() {
 
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.CartReducer);
-  const { orderDetail } = useSelector((state) => state.CartReducer);
   const [rows, setRows] = useState(cart);
   useEffect(() => {
     setRows(cart);
   }, [cart]);
-  const email = storage.get(USER_LOGIN);
   return (
     <Container>
       <Box>

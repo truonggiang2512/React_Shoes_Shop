@@ -3,7 +3,7 @@ import { http } from "../../Utils/config";
 import storage from "../../Utils/storage";
 const storeCart = storage.get("CartList");
 const initialState = {
-  cart: storeCart,
+  cart: storeCart || "",
   orderDetail: [],
   email: "ditconmemay@gmail.com",
 };
