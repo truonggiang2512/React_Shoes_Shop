@@ -41,7 +41,6 @@ export default function Header() {
   };
   const token = storage.get(TOKEN);
   storage.save("CartList", "");
-  console.log(token, "header");
   const submitSearch = (event) => {
     event.preventDefault();
     let value = event.target.search.value;
@@ -108,7 +107,6 @@ export default function Header() {
                 variant="subtitle1"
                 onClick={() => {
                   storage.clear(TOKEN);
-                  storage?.clear(USER_LOGIN);
                   window.location.pathname = "/home";
                 }}
               >
