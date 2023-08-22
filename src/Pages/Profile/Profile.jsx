@@ -26,12 +26,13 @@ import {
 } from "@mui/material";
 export default function Profile() {
   const { userProfile } = useSelector((state) => state.userReducer);
-  const orderRow = useSelector((state) => state.userReducer.orderProfile);
+
+  const { cart } = useSelector((state) => state.CartReducer);
   const [selected, setSelected] = useState(`${userProfile?.gender}`);
-  const [rows, setRows] = useState(orderRow);
+  const [rows, setRows] = useState(cart);
   useEffect(() => {
-    setRows(orderRow);
-  }, [orderRow]);
+    setRows(cart);
+  }, [cart]);
   const handleChange = (event) => {
     setSelected(event.target.value);
   };
@@ -251,8 +252,8 @@ export default function Profile() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orderRow.map((item, index) =>
-                  item?.orderDetail.map((product) => (
+                {cart.map((product, index) => {
+                  return (
                     <TableRow key={index}>
                       <TableCell>
                         <p>{product.name}</p>
@@ -269,10 +270,10 @@ export default function Profile() {
                       </TableCell>
                       <TableCell>${product.price}</TableCell>
                       <TableCell>{product.quantity}</TableCell>
-                      <TableCell>${product.price}</TableCell>
+                      <TableCell>${product.price * product.quantity}</TableCell>
                     </TableRow>
-                  ))
-                )}
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>

@@ -33,11 +33,13 @@ const CartReducer = createSlice({
     },
     changeQuantityAction: (state, action) => {
       let { id, quantity } = action.payload;
-      let prodCart = state.cart.find((pro) => pro.id == id);
-      console.log(prodCart);
+      let prodCart = state.cart?.find((pro) => pro.id == id);
       if (prodCart) {
         prodCart.quantity += quantity;
+      } else {
+        state.cart.push(prodCart);
       }
+      storage.save("CartList", state.cart);
     },
   },
   extraReducers: (builder) => {

@@ -7,9 +7,6 @@ import {
   delProductAction,
   postProductAction,
 } from "../../Redux/Reducers/CartReducer";
-import { http } from "../../Utils/config";
-import storage from "../../Utils/storage";
-import { USER_LOGIN } from "../../Utils/constant";
 
 export default function Cart() {
   const columns = [
@@ -150,11 +147,6 @@ export default function Cart() {
               }}
             >
               Save Order
-            </Button>
-          </Box>
-          <Box px={10}>
-            <Button variant="contained" onClick={() => {}}>
-              Submit Order
             </Button>
           </Box>
         </Box>
