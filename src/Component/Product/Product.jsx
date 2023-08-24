@@ -14,13 +14,15 @@ import {
   Snackbar,
 } from "@mui/material";
 import { Stack } from "@mui/system";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import Rating from "@mui/material/Rating";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getallProductApi } from "../../Redux/Reducers/ProductReducer";
 import { addToCartAction } from "../../Redux/Reducers/CartReducer";
 import { grey } from "@mui/material/colors";
+import storage from "../../Utils/storage";
+import { TOKEN } from "../../Utils/config";
 
 export default function Product() {
   const params = useParams();
@@ -29,7 +31,7 @@ export default function Product() {
   const handleAlertOpen = () => {
     setOpen(true);
   };
-
+  const navigate = useNavigate();
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -37,6 +39,7 @@ export default function Product() {
 
     setOpen(false);
   };
+  const token = storage.get(TOKEN);
   const renderAllProduct = () => {
     return arrProduct.map((item) => {
       return (
@@ -68,9 +71,14 @@ export default function Product() {
               <CardActions sx={{ justifyContent: "center" }}>
                 <Button
                   onClick={() => {
-                    const action = addToCartAction(item);
-                    dispatch(action);
-                    handleAlertOpen();
+                    if (token) {
+                      const action = addToCartAction(item);
+                      dispatch(action);
+                      handleAlertOpen();
+                    } else {
+                      alert("You must login first!!!");
+                      navigate("/login");
+                    }
                   }}
                   style={{
                     backgroundColor: "black",
@@ -125,7 +133,7 @@ export default function Product() {
             severity="success"
             sx={{ width: "100%" }}
           >
-            Add to Cart successful!!!
+            Add to Cart successfully!!!
           </Alert>
         </Snackbar>
       </Stack>

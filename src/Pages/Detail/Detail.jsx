@@ -1,11 +1,14 @@
 import { Button } from "@mui/base";
 import {
+  Alert,
   Box,
   Card,
   CardContent,
   CardMedia,
   Container,
   Grid,
+  Snackbar,
+  Stack,
   Typography,
 } from "@mui/material";
 import Rating from "@mui/material/Rating";
@@ -14,12 +17,14 @@ import CardActions from "@mui/material/CardActions";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductByIDApi } from "../../Redux/Reducers/ProductReducer";
 import { useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
   addToCartAction,
   changeQuantityAction,
 } from "../../Redux/Reducers/CartReducer";
+import storage from "../../Utils/storage";
+import { TOKEN } from "../../Utils/config";
 
 export default function Detail() {
   const [productDetail, setProductDetail] = useState({});
@@ -27,7 +32,7 @@ export default function Detail() {
   const params = useParams();
   const { arrProduct } = useSelector((state) => state.productReducer);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const getProductDetailApi = async (id) => {
     const result = await axios({
       url: `https://shop.cyberlearn.vn/api/Product/getbyid?id=${id}`,
@@ -37,6 +42,20 @@ export default function Detail() {
     setProductDetail(result.data.content);
     console.log("id", result.data.content);
   };
+  const [open, setOpen] = React.useState(false);
+
+  const handleAlertOpen = () => {
+    setOpen(true);
+  };
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const token = storage.get(TOKEN);
   useEffect(() => {
     getProductDetailApi(params.id);
   }, [params.id]);
@@ -74,9 +93,14 @@ export default function Detail() {
                     color: "white",
                   }}
                   onClick={() => {
-                    const action = addToCartAction(item);
-                    dispatch(action);
-                    console.log(action);
+                    if (token) {
+                      const action = addToCartAction(item);
+                      dispatch(action);
+                      handleAlertOpen();
+                    } else {
+                      alert("You must login first!!!");
+                      navigate("/login");
+                    }
                   }}
                   size="small"
                 >
@@ -180,9 +204,14 @@ export default function Detail() {
                     color: "white",
                   }}
                   onClick={() => {
-                    const action = addToCartAction(productDetail);
-                    dispatch(action);
-                    console.log(action);
+                    if (token) {
+                      const action = addToCartAction(item);
+                      dispatch(action);
+                      handleAlertOpen();
+                    } else {
+                      alert("You must login first!!!");
+                      navigate("/login");
+                    }
                   }}
                   size="small"
                 >
@@ -225,6 +254,21 @@ export default function Detail() {
       >
         {renderRelateProduct()}
       </Grid>
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleAlertClose}
+        >
+          <Alert
+            onClose={handleAlertClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Add to Cart successfully!!!
+          </Alert>
+        </Snackbar>
+      </Stack>
     </Container>
   );
 }
